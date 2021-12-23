@@ -1,0 +1,108 @@
+#!/usr/bin/perl 
+#
+# SPDX-License-Identifier: GPL-2.0
+#
+# Script to nmap scan the interfaces on the local machine 
+#
+# As suggested by the Dutch National Cyber Security Center:
+# https://www.ncsc.nl/onderwerpen/basismaatregelen 
+# "Controleer welke apparaten en diensten bereikbaar zijn vanaf het internet en bescherm deze"
+#
+# You can allow certain ports by adding the ip and the nmap open service port line to 
+# /etc/security/nmap_local.conf
+# 127.0.0.1 25/tcp open  smtp 
+#
+# 2021 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
+
+
+
+use Data::Dumper ;
+@eaddr = `ip -o -f inet a` ;
+foreach $i (@eaddr) { 
+	@eaddr2_1 = split(/\s+/,$i) ; 
+	@eaddr2_2 = split(/\//, $eaddr2_1[3]) ; 
+	push(@eaddr2,$eaddr2_2[0]) ; 
+}
+
+foreach $ip ( @eaddr2 ) {
+	c_ip($ip) ;
+}
+
+sub c_e { 
+	chomp $ip_op ; 
+	my $e = "/etc/security/nmap_local.conf" ;
+	open my $f, '<', "$e" or die "err: $!" ;
+
+	@ip_op = split(/\s+/,$ip_op) ;
+	$ip_op = join(" ",@ip_op) ;
+
+	while(<$f>){
+		chomp $_ ;
+		push(@allow, $_) ;
+	}
+ 	foreach my $i ( @allow ){ 	
+		@ii = split(/\s+/,$i) ;
+		$i = join(" ",@ii) ;
+
+		if( $i =~ /^$ip_op$/ ) {
+			return("0") ;  
+		}
+
+	}
+}
+
+sub c_m { 
+	@a = `cat /tmp/nmapstatus.$ip.$$ | grep open`; 
+	foreach(@a) { 
+		chomp ;
+	}
+	return(@a) ;
+}
+
+		
+
+sub c_ip {
+	open $nmapstatfh, "+>", "/tmp/nmapstatus.$ip.$$" or die "err: $!" ;
+	open $nmaplogger , "|-", "logger -t \"nmap_local\" 2>/dev/null" ;
+
+
+	open $nmap, "nmap -p 1-65535,U:1-65535 $ip |" ;
+	while(<$nmap>){
+		print $nmapstatfh $_ ;
+	}
+
+	$nmapch = `cat /tmp/nmapstatus.$ip.$$` ;
+
+	if( $nmapch =~ /are closed/ ) {
+    		logMessage("$ip PASS") ;
+	} else {
+		@res = c_m() ;
+		foreach $i (@res) { 
+			$ip_op = "$ip $i" ;
+			my $res = c_e($ip_op) ;
+			if( $res =~ /0/ ) {
+		    		logMessage("$ip PASS $i") ; 
+	    		} else { 
+    		    		logMessage("$ip FAIL $i") ;
+    		    		print $nmaplogger "$ip FAIL $i\n" ; 
+			}
+		}
+
+	}
+	unlink("/tmp/nmapstatus.$ip.$$") ;
+}
+
+sub logMessage() {
+	my $msg = shift ;
+       	my $dst = shift ;
+		if($dst) { 
+			my $fd ;
+			open $fd, ">&3" ;
+			print $fd "$msg\n"; 
+			close($fd) ;
+			return;
+		}
+	print($msg);
+	print("\n");
+}
+			 
