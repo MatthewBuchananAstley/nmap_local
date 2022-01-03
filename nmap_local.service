@@ -5,7 +5,6 @@
 [Unit]
 Description=Run nmap scan on the local machine to see if all ports are closed 
 ConditionCapability=CAP_SYS_ADMIN
-ConditionCapability=CAP_SYS_RAWIO
 Documentation=man:nmap(8)
 
 [Service]
@@ -15,7 +14,7 @@ PrivateNetwork=false
 ProtectSystem=true
 ProtectHome=read-only
 PrivateTmp=yes
-AmbientCapabilities=CAP_SYS_ADMIN CAP_SYS_RAWIO
+AmbientCapabilities=CAP_SYS_ADMIN
 NoNewPrivileges=yes
 User=root
 IOSchedulingClass=idle
