@@ -28,6 +28,19 @@ foreach $ip ( @eaddr2 ) {
 	c_ip($ip) ;
 }
 
+
+sub o_l { 
+	@dv = `ls /sys/class/net` ;
+	foreach my $i (<@dv>) {
+		$i =~ s/\\// ;
+		#shift @dv; 
+		push(@dv, $ii) ;
+	}
+	pop(@dv) ;
+	pop(@dv) ;
+	return(@dv) ;
+}
+
 sub c_e { 
 	chomp $ip_op ; 
 	my $e = "/etc/security/nmap_local.conf" ;
@@ -85,9 +98,17 @@ sub c_ip {
 	    		} else { 
     		    		logMessage("$ip FAIL $i") ;
     		    		print $nmaplogger "$ip FAIL $i\n" ; 
+				#
+				# Uncomment the following lines if you want to disable the network 
+				# interface if a unsuspected port is opened on the host.
+				#@ints = o_l() ;
+				#foreach my $i (@ints) { 
+				#	chomp $i;
+				#	exec "/usr/sbin/ip link set $i down" ;
+				#}	
+
 			}
 		}
-
 	}
 	unlink("/tmp/nmapstatus.$ip.$$") ;
 }
