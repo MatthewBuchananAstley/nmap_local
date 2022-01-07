@@ -2,15 +2,21 @@
 #
 # SPDX-License-Identifier: GPL-2.0
 #
-# Script to nmap scan the interfaces on the local machine 
+# Script to nmap scan the interfaces on the local machine. 
 #
 # As suggested by the Dutch National Cyber Security Center:
 # https://www.ncsc.nl/onderwerpen/basismaatregelen 
-# "Controleer welke apparaten en diensten bereikbaar zijn vanaf het internet en bescherm deze"
+# "Controleer welke apparaten en diensten bereikbaar zijn 
+# vanaf het internet en bescherm deze"
 #
-# You can allow certain ports by adding the ip and the nmap open service port line to 
-# /etc/security/nmap_local.conf
-# 127.0.0.1 25/tcp open  smtp 
+# You can allow certain ports by adding the ip and the nmap 
+# open service port line to /etc/security/nmap_local.conf
+# 
+#    127.0.0.1 25/tcp open  smtp 
+#
+# optionally you can disable the network interface or 
+# perform another proportional retalliatory action by adding 
+# some system command in the FAIL block. 
 #
 # 2021 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 
