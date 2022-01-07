@@ -18,7 +18,7 @@ AmbientCapabilities=CAP_SYS_ADMIN
 NoNewPrivileges=yes
 User=root
 IOSchedulingClass=idle
-CPUSchedulingPolicy=iCAP_SYS_RAWIOdle
+CPUSchedulingPolicy=idle
 Environment=SERVICE_MODE=1
 ExecStart=/usr/bin/nmap_local.pl
 SyslogIdentifier=%N
