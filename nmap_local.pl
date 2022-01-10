@@ -106,7 +106,7 @@ sub c_ip {
     		    		print $nmaplogger "$ip FAIL $i\n" ; 
 				#
 				# Uncomment the following lines if you want to disable the network 
-				# interface if a unsuspected port is opened on the host.
+				# interface if an unsuspected port is opened on the host.
 				#@ints = o_l() ;
 				#foreach my $i (@ints) { 
 				#	chomp $i;
