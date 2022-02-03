@@ -1,6 +1,7 @@
 #!/usr/bin/perl 
 #
-# SPDX-License-Identifier: GPL-2.0
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2021-2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 #
 # Script to nmap scan the interfaces on the local machine. 
 #
@@ -18,7 +19,6 @@
 # perform another proportional retalliatory action by adding 
 # some system command in the FAIL block. 
 #
-# 2021 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 
 
 @eaddr = `ip -o -f inet a` ;

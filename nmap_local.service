@@ -1,4 +1,5 @@
 #
+# SPDX-License-Identifier: GPL-3.0-or-later 
 # Systemd service for nmap scan of the local machine at boot time
 # /etc/systemd/system/default.target.wants/nmap_local.service
 
@@ -20,7 +21,7 @@ User=root
 IOSchedulingClass=idle
 CPUSchedulingPolicy=idle
 Environment=SERVICE_MODE=1
-ExecStart=/usr/bin/nmap_local.pl
+ExecStart=/usr/bin/nmap_local
 SyslogIdentifier=%N
 RemainAfterExit=no
 
