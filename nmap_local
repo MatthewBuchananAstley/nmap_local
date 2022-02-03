@@ -21,8 +21,6 @@
 # 2021 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 
 
-
-use Data::Dumper ;
 @eaddr = `ip -o -f inet a` ;
 foreach $i (@eaddr) { 
 	@eaddr2_1 = split(/\s+/,$i) ; 
