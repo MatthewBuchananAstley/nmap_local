@@ -13,7 +13,7 @@ Fortunately the nmap_local script stopped that promiscuous behavior by disabling
 Services that need to have an open port can be defined in nmap_local.conf. 
 The line that appears in the nmap scan output can be used. For instance:
 
-127.0.0.1 25/tcp open  smp
+127.0.0.1 25/tcp open  smtp
 
 nmap_local.conf goes in /etc/security/nmap_local.conf
 
