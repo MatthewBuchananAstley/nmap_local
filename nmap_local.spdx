@@ -2,16 +2,16 @@ SPDXVersion: SPDX-2.2
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-DOCUMENT
 DocumentName: nmap_local.spdx
-DocumentNamespace: https://github.com/MatthewBuchananAstley/nmap_local.git
+DocumentNamespace: https://github.com:MatthewBuchananAstley/nmap_local.git
 Creator: Person: Matthew Buchanan Astley (matthewbuchanan@astley.nl)
-Created: 2022-02-15T21:20:27Z
-CreatorComment: nmap_local spdx file
+Created: 2022-03-05T11:57:28Z
+CreatorComment: nmap_local script spdx file
 
 #
 #
 
 PackageName: nmap_local
-SPDXID: SPDXRef-MatthewBuchananAstley-Package-nmap-local
+SPDXID: SPDXRef-nmap_local.git-Package-nmap-local
 PackageVersion: 1.0
 PackageVerificationCode: a83b8e056ba92b2283d1ee1c3ccfa6e7b2e2c648 (./nmap_local.spdx excluded )
 PackageLicenseDeclared: GPL-3.0-or-later
@@ -20,7 +20,7 @@ PackageLicenseInfoFromFiles: LicenseRef-CC0-1.0
 PackageLicenseConcluded: LicenseRef-GPL-3.0-or-later
 PackageLicenseConcluded: LicenseRef-CC0-1.0 
 PackageCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
-PackageDownloadLocation: https://github.com/MatthewBuchananAstley/nmap_local.git
+PackageDownloadLocation: https://github.com:MatthewBuchananAstley/nmap_local.git
 
 #
 #
