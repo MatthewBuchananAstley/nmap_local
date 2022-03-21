@@ -16,7 +16,7 @@
 #    127.0.0.1 25/tcp open  smtp 
 #
 # optionally you can disable the network interface or 
-# perform another proportional retalliatory action by adding 
+# perform another proportional retaliatory action by adding 
 # some system command in the FAIL block. 
 #
 
