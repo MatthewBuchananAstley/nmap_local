@@ -1,0 +1,12 @@
+#!/usr/bin/python3
+
+import os,sys
+import time
+import random
+
+a = str(time.time()).split('.')
+
+a1 = random.SystemRandom("/dev/urandom")
+a2 = a1.randint(0,300)
+
+print("ja",a[0], a2)

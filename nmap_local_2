@@ -20,6 +20,7 @@
 # some system command in the FAIL block. 
 #
 
+use Data::Dumper ;
 
 @eaddr = `ip -o -f inet a` ;
 #@eaddr = `ip -o a` ;
@@ -30,8 +31,35 @@ foreach $i (@eaddr) {
 	push(@eaddr2,$eaddr2_2[0]) ; 
 }
 
+@e = [] ;
 foreach $ip ( @eaddr2 ) {
-	c_ip($ip) ;
+	push(@e, c_ip($ip)) ;
+
+	#@e = getif() ;
+	#print Dumper \@e ; 
+	#if( $a => 1 ) { 
+	#	dctvt($a) ;
+	##}
+}
+
+#print Dumper \@e ;
+
+
+@e1 = getif() ; ;
+
+print Dumper \@e1 ;
+
+foreach my $i (@e) { 
+	#print "Jaa " . scalar(@{$i}) . "\n" ;
+	if( scalar(@{$i}) == 2 ) {
+		foreach my $ii (@e1) {
+			if( @{$ii}[1] =~ /@{$i}[0]/ ) {
+				print "JaA " . @{$ii}[0] . " " . @{$i}[0] . " " . @{$i}[1] ;
+				$d = @{$ii}[0] ;
+				dctvt($d) ;
+			}
+		}
+	}	
 }
 
 
@@ -48,6 +76,7 @@ sub o_l {
 }
 
 sub c_e { 
+
 	chomp $ip_op ; 
 	my $e = "/etc/security/nmap_local.conf" ;
 	open my $f, '<', "$e" or die "err: $!" ;
@@ -61,31 +90,28 @@ sub c_e {
 	}
 
  	foreach my $i ( @allow ){ 	
+		#print $i ;
 		@ii = split(/\s+/,$i) ;
 		$i = join(" ",@ii) ;
 		if( $i =~ /^$ip_op$/ ) {
 			return("0") ;  
 		}
-
 	}
-
 }
 
 sub c_m { 
-	@a = `cat /tmp/nmapstatus.$ip.$$ | grep open`; 
+	my @a = `cat /tmp/nmapstatus.$ip.$$ | grep open`; 
 	foreach(@a) { 
 		chomp ;
 	}
 	return(@a) ;
 }
 
-		
 
 sub c_ip {
 
 	open $nmapstatfh, "+>", "/tmp/nmapstatus.$ip.$$" or die "err: $!" ;
 	open $nmaplogger , "|-", "logger -t \"nmap_local\" 2>/dev/null" ;
-
 
 	open $nmap, "nmap -p 1-65535 -sU $ip |" or die "$!" ;
 	#open $nmap, "nmap -p 1-65535 $ip |" ;
@@ -96,18 +122,23 @@ sub c_ip {
 
 	$nmapch = `cat /tmp/nmapstatus.$ip.$$` ;
         #print $nmapch ;
+
+
 	if( $nmapch =~ /are closed/ || $nmapch =~ /All 65535/) {
     		print $nmaplogger "$ip PASS $i\n" ; 
     		print "$ip PASS $i\n" ; 
     		#logMessage("$ip PASS") ;
 
 	} else {
+		@a = [] ;
+
 		@res = c_m() ;
 		#print "Ja @res" ;
+
 		foreach $i (@res) { 
 			$ip_op = "$ip $i" ;
 			my $res = c_e($ip_op) ;
-			#print "Ja $res" ;
+			#print "JA $res" ;
 			if( $res =~ /0/ ) {
 		    		#logMessage("$ip PASS $i") ; 
     		    		print $nmaplogger "$ip PASS $i\n" ; 
@@ -116,37 +147,58 @@ sub c_ip {
     		    		#logMessage("$ip FAIL $i") ;
     		    		print $nmaplogger "$ip FAIL $i\n" ; 
     		    		print "$ip FAIL $i\n" ; 
+				push(@a, [ $ip , $i ] ) ;
 				#
 				# Uncomment the following lines if you want to disable the network 
 				# interface if an unexpected port is opened on the host.
-
-				@ints = o_l() ;
 				#print @ints ;
-
-				foreach my $ii (@ints) { 
-					chomp $ii;
-				#	#exec "/usr/sbin/ip link set $i down" or print STDERR "$!" ;
-					system ( "/usr/sbin/ip", "link", "set", "$ii", "down" ) ;
-				#	#or print STDERR "$!" ;
-				}	
-
 			}
 		}
-	}
+		#print "Ja $a";
 	unlink("/tmp/nmapstatus.$ip.$$") ;
+	return(@a) ;
+        }
+
+	#unlink("/tmp/nmapstatus.$ip.$$") ;
+	#return(@a) ;
+
 }
 
-#sub logMessage() {
-#	my $msg = shift ;
-#       	my $dst = shift ;
-#		if($dst) { 
-#			my $fd ;
-#			open $fd, ">&3" ;
-#			print $fd "$msg\n"; 
-#			close($fd) ;
-#			return;
-#		}
-#	print($msg);
-#	print("\n");
-#}
-			 
+
+sub getif { 
+
+	@eaddr = `ip -o -f inet a` ;
+
+	#%eaddr2 = {} ;
+	@eaddr2 = [] ;
+
+	foreach $i (@eaddr) { 
+		@eaddr2_1 = split(/\s+/,$i) ; 
+		@eaddr2_2 = split(/\//, $eaddr2_1[3]) ; 
+		push(@eaddr2, [ $eaddr2_1[1], $eaddr2_2[0] ]) ; 
+		#$eaddr2{$eaddr2_2[0]} = $eaddr2_1[1] ;
+	}
+
+	return(@eaddr2) ;
+
+	#print Dumper \%eaddr2 ;
+	#print Dumper \@eaddr2 ;
+
+}
+
+
+sub dctvt {
+#	%ints = gt() ;
+#        print Dumper \%ints ;
+#	exit ; 
+#        foreach my $ii (@ints) {
+#		chomp $ii;
+#		print $ii ; 
+		#print "Ja " . $ii . " " . $_{$ii} ; 
+		#exec "/usr/sbin/ip link set $i down" or print STDERR "$!" ;
+	system ( "/usr/sbin/ip", "link", "set", $d, "down" ) or print STDERR "$!" ;
+		#       #or print STDERR "$!" ;
+#        }
+}
+
+
