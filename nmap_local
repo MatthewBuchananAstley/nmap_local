@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 #
+# Ubuntu version
+#
 # Script to nmap scan the interfaces on the local machine. 
 #
 # As suggested by the Dutch National Cyber Security Center:
