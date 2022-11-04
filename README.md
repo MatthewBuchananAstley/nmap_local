@@ -26,3 +26,9 @@ or manually create the symlink in:
 
 cd /etc/systemd/system/default.target.wants ;
 ln -s /lib/systemd/system/nmap_local.service nmap_local.service
+
+# Versions
+
+nmap_local should work on Ubuntu Linux
+nmap_local_3 should work on Fedora Linux
+
