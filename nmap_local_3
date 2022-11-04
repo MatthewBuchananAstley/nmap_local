@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 #
+# Fedora linux version
+# 
 # Script to nmap scan the interfaces on the local machine. 
 #
 # As suggested by the Dutch National Cyber Security Center:
@@ -35,39 +37,31 @@ foreach $i (@eaddr) {
 foreach $ip ( @eaddr2 ) {
 	push(@e, c_ip($ip)) ;
 
-	#@e = getif() ;
-	#print Dumper \@e ; 
-	#if( $a => 1 ) { 
-	#	dctvt($a) ;
-	##}
 }
-
-#print Dumper \@e ;
-
 
 @e1 = getif() ; ;
 
-print Dumper \@e1 ;
+#
+# uncomment the block below if you want the script to deactivate  
+# the interface when a sudden open port is detected.
+#
 
-foreach my $i (@e) { 
-	#print "Jaa " . scalar(@{$i}) . "\n" ;
-	if( scalar(@{$i}) == 2 ) {
-		foreach my $ii (@e1) {
-			if( @{$ii}[1] =~ /@{$i}[0]/ ) {
-				print "JaA " . @{$ii}[0] . " " . @{$i}[0] . " " . @{$i}[1] ;
-				$d = @{$ii}[0] ;
-				dctvt($d) ;
-			}
-		}
-	}	
-}
+#foreach my $i (@e) { 
+#	if( scalar(@{$i}) == 2 ) {
+#		foreach my $ii (@e1) {
+#			if( @{$ii}[1] =~ /@{$i}[0]/ ) {
+#				$d = @{$ii}[0] ;
+#				dctvt($d) ;
+#			}
+#		}
+#	}	
+#}
 
 
 sub o_l { 
 	@dv = `ls /sys/class/net` ;
 	foreach my $i (<@dv>) {
 		$i =~ s/\\// ;
-		#shift @dv; 
 		push(@dv, $ii) ;
 	}
 	pop(@dv) ;
@@ -124,10 +118,8 @@ sub c_ip {
 	open $nmapstatfh_utp, "+>", "/tmp/nmapstatus_utp.$ip.$$" or die "err: $!" ;
 	open $nmapstatfh_tcp, "+>", "/tmp/nmapstatus_tcp.$ip.$$" or die "err: $!" ;
 	open $nmaplogger , "|-", "logger -t \"nmap_local\" 2>/dev/null" ;
-
 	open $nmap_utp, "nmap -p 1-65535 -sU $ip |" or die "$!" ;
 	open $nmap_tcp, "nmap -p 1-65535 $ip |" or die "$!" ;
-	#open $nmap, "nmap -p 1-65535 $ip |" ;
 
 	while(<$nmap_utp>){
 		print $nmapstatfh_utp $_ ;
@@ -141,43 +133,29 @@ sub c_ip {
 	$nmapch_utp = `cat /tmp/nmapstatus_utp.$ip.$$` ;
 	$nmapch_tcp = `cat /tmp/nmapstatus_tcp.$ip.$$` ;
 
-        #print $nmapch ;
-
 	@a = [] ;
 
         if( $nmapch_utp =~ /are closed/ || $nmapch =~ /All 65535/) {
                 print $nmaplogger "$ip PASS $i\n" ;
                 print "$ip PASS $i\n" ;
-                #logMessage("$ip PASS") ;
 
         } else {
-#                @a = [] ;
 
                 @res = c_mu() ;
-                #print "Ja @res" ;
 
                 foreach $i (@res) {
                         $ip_op = "$ip $i" ;
                         my $res = c_e($ip_op) ;
-                        #print "JA $res" ;
+
                         if( $res =~ /0/ ) {
-                                #logMessage("$ip PASS $i") ;
                                 print $nmaplogger "$ip PASS $i\n" ;
                                 print "$ip PASS $i\n" ;
                         } else {
-                                #logMessage("$ip FAIL $i") ;
                                 print $nmaplogger "$ip FAIL $i\n" ;
                                 print "$ip FAIL $i\n" ;
                                 push(@a, [ $ip , $i ] ) ;
-                                #
-                                # Uncomment the following lines if you want to disable the network
-                                # interface if an unexpected port is opened on the host.
-                                #print @ints ;
                         }
                 }
-                #print "Ja $a";
-#        unlink("/tmp/nmapstatus_utp.$ip.$$") ;
-#        return(@a) ;
         }
 
 
@@ -185,39 +163,25 @@ sub c_ip {
 	if( $nmapch_tcp =~ /are closed/ || $nmapch =~ /All 65535/) {
     		print $nmaplogger "$ip PASS $i\n" ; 
     		print "$ip PASS $i\n" ; 
-    		#logMessage("$ip PASS") ;
 
 	} else {
-#		@a = [] ;
 
 		@res = c_mt() ;
-		#print "Ja @res" ;
 
 		foreach $i (@res) { 
 			$ip_op = "$ip $i" ;
 			my $res = c_e($ip_op) ;
-			#print "JA $res" ;
 			if( $res =~ /0/ ) {
-		    		#logMessage("$ip PASS $i") ; 
     		    		print $nmaplogger "$ip PASS $i\n" ; 
     		    		print "$ip PASS $i\n" ; 
 	    		} else { 
-    		    		#logMessage("$ip FAIL $i") ;
     		    		print $nmaplogger "$ip FAIL $i\n" ; 
     		    		print "$ip FAIL $i\n" ; 
 				push(@a, [ $ip , $i ] ) ;
-				#
-				# Uncomment the following lines if you want to disable the network 
-				# interface if an unexpected port is opened on the host.
-				#print @ints ;
 			}
 		}
-		#print "Ja $a";
-#	unlink("/tmp/nmapstatus_tcp.$ip.$$") ;
-#	return(@a) ;
         }
 
-	#unlink("/tmp/nmapstatus.$ip.$$") ;
 	return(@a) ;
 
 }
@@ -239,24 +203,11 @@ sub getif {
 
 	return(@eaddr2) ;
 
-	#print Dumper \%eaddr2 ;
-	#print Dumper \@eaddr2 ;
-
 }
 
 
 sub dctvt {
-#	%ints = gt() ;
-#        print Dumper \%ints ;
-#	exit ; 
-#        foreach my $ii (@ints) {
-#		chomp $ii;
-#		print $ii ; 
-		#print "Ja " . $ii . " " . $_{$ii} ; 
-		#exec "/usr/sbin/ip link set $i down" or print STDERR "$!" ;
 	system ( "/usr/sbin/ip", "link", "set", $d, "down" ) or print STDERR "$!" ;
-		#       #or print STDERR "$!" ;
-#        }
 }
 
 
