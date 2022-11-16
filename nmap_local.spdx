@@ -2,10 +2,10 @@ SPDXVersion: SPDX-2.2
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-DOCUMENT
 DocumentName: nmap_local.spdx
-DocumentNamespace: https://github.com/MatthewBuchananAstley/nmap_local.git
+DocumentNamespace: https://github.com/MatthewBuchananAstley/nmap_local
 Creator: Person: Matthew Buchanan Astley (matthewbuchanan@astley.nl)
-Created: 2022-03-21T15:00:35Z
-CreatorComment: nmap local spdx file
+Created: 2022-11-16T21:31:00Z
+CreatorComment: nmap_local spdx file
 
 #
 #
@@ -13,27 +13,14 @@ CreatorComment: nmap local spdx file
 PackageName: nmap_local
 SPDXID: SPDXRef-MatthewBuchananAstley-Package-nmap-local
 PackageVersion: 1.0
-PackageVerificationCode: 34d2c764593fcaba771f2d3aba07e24331219e02 (./nmap_local.spdx excluded )
+PackageVerificationCode: 327a333781b5718eb1178b1dc1bc4da86eecfd7a (./nmap_local.spdx excluded )
 PackageLicenseDeclared: GPL-3.0-or-later
 PackageLicenseInfoFromFiles: LicenseRef-GPL-3.0-or-later
 PackageLicenseInfoFromFiles: LicenseRef-CC0-1.0 
 PackageLicenseConcluded: LicenseRef-GPL-3.0-or-later
 PackageLicenseConcluded: LicenseRef-CC0-1.0 
 PackageCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
-PackageDownloadLocation: https://github.com/MatthewBuchananAstley/nmap_local.git
-
-#
-#
-#
-
-FileName: ./README.md
-SPDXID: SPDXRef-README.md
-FileType: TEXT
-FileChecksum: SHA256: 55035a01630ae488697a62e9344cc32b560107dc0ff54f98785842c9b8f468b3
-FileChecksum: SHA1: 43e2fde7a720dddc1d606f683e0b9a440d56b748
-FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
-LicenseInfoInFile: NOASSERTION
-LicenseConcluded: NOASSERTION
+PackageDownloadLocation: https://github.com/MatthewBuchananAstley/nmap_local
 
 #
 #
@@ -45,6 +32,19 @@ FileType: TEXT
 FileChecksum: SHA256: ff899c3b99ceb56a2935151ce494289f07c572b89f0fe6a5654bfddd62c28760
 FileChecksum: SHA1: 148650280c08f7218f979e93a2ab5c00603a19ed
 FileCopyrightText: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+LicenseConcluded: NOASSERTION
+
+#
+#
+#
+
+FileName: ./README.md
+SPDXID: SPDXRef-README.md
+FileType: TEXT
+FileChecksum: SHA256: 65fca3b9c29d050ea3ff7dd5f3adb414b1fe9f9399291a3bd99d54b6c57377d1
+FileChecksum: SHA1: e0f41e013e587bf0696c4c82ede10a66aa05eac0
+FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
 LicenseInfoInFile: NOASSERTION
 LicenseConcluded: NOASSERTION
 
@@ -65,19 +65,6 @@ LicenseConcluded: GPL-3.0-or-later
 #
 #
 
-FileName: ./nmap_local
-SPDXID: SPDXRef-nmap-local
-FileType: APPLICATION
-FileChecksum: SHA256: c2073abeb3d3b54bd04a32d6df5a271b6f64a9d0abbc2cf8e3c1e8a85473dce4
-FileChecksum: SHA1: 3aeae70bbbbe88790728bd3f54df25dbc51db00d
-FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
-LicenseInfoInFile: GPL-3.0-or-later
-LicenseConcluded: GPL-3.0-or-later
-
-#
-#
-#
-
 FileName: ./nmap_local.service
 SPDXID: SPDXRef-nmap-local.service
 FileType: TEXT
@@ -86,4 +73,43 @@ FileChecksum: SHA1: 4575279e17142588602fb4b9315bd5fe541910d8
 FileCopyrightText: NOASSERTION
 LicenseInfoInFile: CC0-1.0
 LicenseConcluded: CC0-1.0
+
+#
+#
+#
+
+FileName: ./nmap_local
+SPDXID: SPDXRef-nmap-local
+FileType: APPLICATION
+FileChecksum: SHA256: a22fcf6c27b99c9469668778ede9bcd9a231b1d2d0c7c452d2722a25138e6b89
+FileChecksum: SHA1: 66513ef3e723e747ddbb6212cb511c5c3108dfa8
+FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
+LicenseInfoInFile: GPL-3.0-or-later
+LicenseConcluded: GPL-3.0-or-later
+
+#
+#
+#
+
+FileName: ./nmap_local_2
+SPDXID: SPDXRef-nmap-local-2
+FileType: APPLICATION
+FileChecksum: SHA256: a35ea70a5e3daad28c10195e1f7549b80636ff07f630ca4035bdd2461e0732d9
+FileChecksum: SHA1: ea14b4faa10ae8bfba4fd3a743176c135a0116de
+FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
+LicenseInfoInFile: GPL-3.0-or-later
+LicenseConcluded: GPL-3.0-or-later
+
+#
+#
+#
+
+FileName: ./nmap_local_3
+SPDXID: SPDXRef-nmap-local-3
+FileType: APPLICATION
+FileChecksum: SHA256: b284efb2f913289e33dde4fe63f46bf34188ce40fb6915d45d86361ba419f95f
+FileChecksum: SHA1: e2f22db33412a9c8211ae402adc1ca161262a988
+FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
+LicenseInfoInFile: GPL-3.0-or-later
+LicenseConcluded: GPL-3.0-or-later
 
