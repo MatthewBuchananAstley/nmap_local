@@ -1,0 +1,222 @@
+#!/usr/bin/perl 
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+# FileCopyrightText: 2021 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl)
+#
+# Fedora linux version
+# 
+# Script to nmap scan the interfaces on the local machine. 
+#
+# As suggested by the Dutch National Cyber Security Center:
+# https://www.ncsc.nl/onderwerpen/basismaatregelen 
+# "Controleer welke apparaten en diensten bereikbaar zijn 
+# vanaf het internet en bescherm deze"
+#
+# You can allow certain ports by adding the ip and the nmap 
+# open service port line to /etc/security/nmap_local.conf
+# 
+#    127.0.0.1 25/tcp open  smtp 
+#
+# optionally you can disable the network interface or 
+# perform another proportional retaliatory action by adding 
+# some system command in the FAIL block. 
+#
+
+use Data::Dumper ;
+
+@eaddr = `ip -o -f inet a` ;
+#@eaddr = `ip -o a` ;
+
+foreach $i (@eaddr) { 
+	@eaddr2_1 = split(/\s+/,$i) ; 
+	@eaddr2_2 = split(/\//, $eaddr2_1[3]) ; 
+	push(@eaddr2,$eaddr2_2[0]) ; 
+}
+
+@e = [] ;
+foreach $ip ( @eaddr2 ) {
+	push(@e, c_ip($ip)) ;
+
+}
+
+@e1 = getif() ; ;
+
+#
+# uncomment the block below if you want the script to deactivate  
+# the interface when a sudden open port is detected.
+#
+
+#foreach my $i (@e) { 
+#	if( scalar(@{$i}) == 2 ) {
+#		foreach my $ii (@e1) {
+#			if( @{$ii}[1] =~ /@{$i}[0]/ ) {
+#				$d = @{$ii}[0] ;
+#				dctvt($d) ;
+#			}
+#		}
+#	}	
+#}
+
+
+sub o_l { 
+	@dv = `ls /sys/class/net` ;
+	foreach my $i (<@dv>) {
+		$i =~ s/\\// ;
+		push(@dv, $ii) ;
+	}
+	pop(@dv) ;
+	pop(@dv) ;
+	return(@dv) ;
+}
+
+sub c_e { 
+
+	chomp $ip_op ; 
+	my $e = "/etc/security/nmap_local.conf" ;
+	open my $f, '<', "$e" or die "err: $!" ;
+
+	@ip_op = split(/\s+/,$ip_op) ;
+	$ip_op = join(" ",@ip_op) ;
+
+	while(<$f>){
+		chomp $_ ;
+		push(@allow, $_) ;
+	}
+
+ 	foreach my $i ( @allow ){ 	
+		#print $i ;
+		@ii = split(/\s+/,$i) ;
+		$i = join(" ",@ii) ;
+		if( $i =~ /^$ip_op$/ ) {
+			return("0") ;  
+		}
+	}
+}
+
+sub c_mu { 
+	my @a = `cat /tmp/nmapstatus_utp.$ip.$$ | grep open`; 
+	foreach(@a) { 
+		chomp ;
+	}
+	return(@a) ;
+}
+
+
+sub c_mt {
+        my @a = `cat /tmp/nmapstatus_tcp.$ip.$$ | grep open`;
+        foreach(@a) {
+                chomp ;
+        }
+        return(@a) ;
+}
+
+
+
+
+sub c_ip {
+
+	open $nmapstatfh_utp, "+>", "/tmp/nmapstatus_utp.$ip.$$" or die "err: $!" ;
+	open $nmapstatfh_tcp, "+>", "/tmp/nmapstatus_tcp.$ip.$$" or die "err: $!" ;
+	open $nmaplogger , "|-", "logger -t \"nmap_local\" 2>/dev/null" ;
+	open $nmap_utp, "nmap -p 1-65535 -sU $ip |" or die "$!" ;
+	open $nmap_tcp, "nmap -p 1-65535 $ip |" or die "$!" ;
+
+	while(<$nmap_utp>){
+		print $nmapstatfh_utp $_ ;
+	}
+
+	 while(<$nmap_tcp>){
+                print $nmapstatfh_tcp $_ ;
+        }
+
+
+	$nmapch_utp = `cat /tmp/nmapstatus_utp.$ip.$$` ;
+	$nmapch_tcp = `cat /tmp/nmapstatus_tcp.$ip.$$` ;
+
+	@a = [] ;
+
+        if( $nmapch_utp =~ /are closed/ || $nmapch =~ /All 65535/) {
+                print $nmaplogger "$ip PASS $i\n" ;
+                print "$ip PASS $i\n" ;
+
+        } else {
+
+                @res = c_mu() ;
+
+                foreach $i (@res) {
+                        $ip_op = "$ip $i" ;
+                        my $res = c_e($ip_op) ;
+
+                        if( $res =~ /0/ ) {
+                                print $nmaplogger "$ip PASS $i\n" ;
+                                print "$ip PASS $i\n" ;
+                        } else {
+                                print $nmaplogger "$ip FAIL $i\n" ;
+                                print "$ip FAIL $i\n" ;
+                                push(@a, [ $ip , $i ] ) ;
+                        }
+                }
+        }
+
+
+
+	if( $nmapch_tcp =~ /are closed/ || $nmapch =~ /All 65535/) {
+    		print $nmaplogger "$ip PASS $i\n" ; 
+    		print "$ip PASS $i\n" ; 
+
+	} else {
+
+		@res = c_mt() ;
+
+		foreach $i (@res) { 
+			$ip_op = "$ip $i" ;
+			my $res = c_e($ip_op) ;
+			if( $res =~ /0/ ) {
+    		    		print $nmaplogger "$ip PASS $i\n" ; 
+    		    		print "$ip PASS $i\n" ; 
+	    		} else { 
+    		    		print $nmaplogger "$ip FAIL $i\n" ; 
+    		    		print "$ip FAIL $i\n" ; 
+				push(@a, [ $ip , $i ] ) ;
+			}
+		}
+        }
+
+<<<<<<< HEAD
+        close $nmapstatfh_utp ;
+        close $nmapstatfh_tcp ;
+        close $nmaplogger ;
+        close $nmap_utp ;
+        close $nmap_tcp ;
+
+=======
+>>>>>>> fbb6afac3139988ab1ab647c4ee788773aac5da0
+	return(@a) ;
+
+}
+
+
+sub getif { 
+
+	@eaddr = `ip -o -f inet a` ;
+
+	#%eaddr2 = {} ;
+	@eaddr2 = [] ;
+
+	foreach $i (@eaddr) { 
+		@eaddr2_1 = split(/\s+/,$i) ; 
+		@eaddr2_2 = split(/\//, $eaddr2_1[3]) ; 
+		push(@eaddr2, [ $eaddr2_1[1], $eaddr2_2[0] ]) ; 
+		#$eaddr2{$eaddr2_2[0]} = $eaddr2_1[1] ;
+	}
+
+	return(@eaddr2) ;
+
+}
+
+
+sub dctvt {
+	system ( "/usr/sbin/ip", "link", "set", $d, "down" ) or print STDERR "$!" ;
+}
+
+
