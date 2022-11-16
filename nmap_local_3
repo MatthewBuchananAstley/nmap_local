@@ -182,6 +182,12 @@ sub c_ip {
 		}
         }
 
+        close $nmapstatfh_utp ;
+        close $nmapstatfh_tcp ;
+        close $nmaplogger ;
+        close $nmap_utp ;
+        close $nmap_tcp ;
+
 	return(@a) ;
 
 }
