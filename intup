@@ -1,6 +1,0 @@
-#!/bin/bash
-
-for i in `ls /sys/class/net`
-	do
-		ip link set $i up
-	done
